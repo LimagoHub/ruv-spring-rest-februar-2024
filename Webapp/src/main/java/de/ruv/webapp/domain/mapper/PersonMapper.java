@@ -1,4 +1,4 @@
-package de.ruv.webapp.domain;
+package de.ruv.webapp.domain.mapper;
 
 import de.ruv.webapp.domain.model.Person;
 import de.ruv.webapp.persistence.entity.PersonEntity;

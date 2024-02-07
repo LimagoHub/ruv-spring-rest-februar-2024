@@ -17,4 +17,6 @@ public interface PersonenRepository extends CrudRepository<PersonEntity, UUID> {
 
     @Query("select new de.ruv.webapp.persistence.entity.TinyPerson(p.id, p.nachname) from PersonEntity p")
     Iterable<TinyPerson> findAllTinyPersons();
+
+
 }

@@ -1,8 +1,12 @@
-package de.ruv.webapp.domain;
+package de.ruv.webapp.domain.internal;
 
+import de.ruv.webapp.domain.mapper.PersonMapper;
+import de.ruv.webapp.domain.PersonenService;
+import de.ruv.webapp.domain.PersonenServiceException;
 import de.ruv.webapp.domain.model.Person;
 import de.ruv.webapp.persistence.PersonenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,11 +19,14 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = PersonenServiceException.class, isolation = Isolation.READ_COMMITTED)
-public class PersonenServiceImpl implements PersonenService{
+public class PersonenServiceImpl implements PersonenService {
 
 
     private final PersonenRepository repo;
     private final PersonMapper mapper;
+
+    @Qualifier("antipathen")
+    private final List<String> antipathen;
 
 //    void bulkInsert(List<Person> personen) throws PersonenServiceException {
 //        for (Person p: personen) {
@@ -95,13 +102,13 @@ public class PersonenServiceImpl implements PersonenService{
         }
     }
 
-    private static void checkPerson(final Person person) throws PersonenServiceException {
+    private void checkPerson(final Person person) throws PersonenServiceException {
         if(person == null) throw new PersonenServiceException("Person darf nicht null sein");
 
         if (person.getVorname() == null || person.getVorname().length() < 2)
             throw new PersonenServiceException("firstname too short");
 
-        if (person.getVorname().equals("Attila"))
+        if (antipathen.contains(person.getVorname()))
             throw new PersonenServiceException("Antipath");
     }
 }

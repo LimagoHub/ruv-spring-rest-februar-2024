@@ -1,6 +1,7 @@
 package de.ruv.webapp.presentation.errorhandling;
 
 import de.ruv.webapp.domain.PersonenServiceException;
+import de.ruv.webapp.domain.SchweineServiceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
-    @ExceptionHandler({PersonenServiceException.class})
+    @ExceptionHandler({PersonenServiceException.class, SchweineServiceException.class})
     public ResponseEntity<Object> handlePersonenServiceException(PersonenServiceException ex, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
