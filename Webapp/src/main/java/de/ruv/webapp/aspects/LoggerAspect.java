@@ -6,18 +6,24 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @Component
 @Aspect
 @Slf4j
 public class LoggerAspect {
 
-    @Before("execution(public * de.ruv.webapp.presentation.controller.PersonenController.*(..))")
+
+
+    //@Before("PointCuts.personenControllerMethods()")
+    @Before("PointCuts.benchmarkMethods()")
     public void logAdvice(JoinPoint joinPoint) {
         log.warn("####### Log advice #######");
         log.warn(joinPoint.getSignature().getName() + " wurde gerufen");
     }
 
-    @AfterReturning(value = "execution(public * de.ruv.webapp.presentation.controller.PersonenController.*(..))",  returning = "result")
+    @AfterReturning(value = "PointCuts.personenControllerMethods()",  returning = "result")
     public void afterdemo(JoinPoint joinPoint, Object result) {
         log.warn("####### Log advice #######");
         log.warn(joinPoint.getSignature().getName() + " wurde gerufen");
@@ -36,9 +42,13 @@ public class LoggerAspect {
         log.warn(joinPoint.getSignature().getName() + " wurde gerufen");
     }
 
-    @Around("execution(public * de.ruv.webapp.presentation.controller.PersonenController.*(..))")
+    @Around("PointCuts.benchmarkMethods()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        // prüfen
-        return proceedingJoinPoint.proceed();
+        var start = Instant.now();
+        var retval = proceedingJoinPoint.proceed();
+        var ende = Instant.now();
+        var duration = Duration.between(start, ende);
+        System.out.println("Duration of " + proceedingJoinPoint.getSignature().getName() + " was " +duration.toMillis()+"ms");
+        return retval;
     }
 }

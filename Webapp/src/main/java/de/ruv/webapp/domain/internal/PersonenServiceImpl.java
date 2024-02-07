@@ -1,5 +1,6 @@
 package de.ruv.webapp.domain.internal;
 
+import de.ruv.webapp.aspects.Benchmark;
 import de.ruv.webapp.domain.mapper.PersonMapper;
 import de.ruv.webapp.domain.PersonenService;
 import de.ruv.webapp.domain.PersonenServiceException;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Benchmark
 @Service
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = PersonenServiceException.class, isolation = Isolation.READ_COMMITTED)
